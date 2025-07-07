@@ -3,3 +3,15 @@ body {
   text-align: center;
   margin-top: 50px;
 }
+
+#timer {
+  font-size: 48px;
+  margin: 20px 0;
+  color: #ff6347;
+}
+
+button {
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
