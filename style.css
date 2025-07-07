@@ -15,3 +15,12 @@ button {
   padding: 10px 20px;
   cursor: pointer;
 }
+
+#controls {
+  margin-top: 20px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
