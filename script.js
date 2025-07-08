@@ -7,6 +7,9 @@ const notification = document.getElementById("notification");
 
 const STORAGE_KEY = "kdb_pomodoro_state";
 
+const darkModeSwitch = document.getElementById("darkModeSwitch");
+const THEME_KEY = "kdb_pomodoro_theme";
+
 const durations = {
   work: 25 * 60,
   short: 5 * 60,
@@ -212,7 +215,24 @@ function loadState() {
   updateDisplay();
 }
 
+function applyTheme(mode) {
+  document.body.classList.toggle("dark", mode === "dark");
+  darkModeSwitch.checked = mode === "dark";
+}
+
+function saveTheme(mode) {
+  localStorage.setItem(THEME_KEY, mode);
+}
+
+darkModeSwitch.addEventListener("change", () => {
+  const mode = darkModeSwitch.checked ? "dark" : "light";
+  applyTheme(mode);
+  saveTheme(mode);
+});
+
 loadState();
 updateDisplay();
 updateSessionLabel();
 updateStats();
+const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+applyTheme(savedTheme);

@@ -91,3 +91,33 @@ button:disabled {
 #notification.show {
   display: block;
 }
+
+body.dark {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark .container {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark #timer {
+  color: #ff8a65;
+}
+
+body.dark button {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark input {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+#themeToggle {
+  margin-top: 20px;
+  font-size: 14px;
+}
