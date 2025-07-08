@@ -1,3 +1,9 @@
+let completedSessions = 0;
+let totalWorkSeconds = 0;
+
+const completedSessionsEl = document.getElementById("completedSessions");
+const totalTimeEl = document.getElementById("totalTime");
+
 const durations = {
   work: 25 * 60,
   short: 5 * 60,
@@ -34,6 +40,9 @@ function updateDisplay() {
 function updateSessionLabel() {
   if (sessionType === "work") {
     sessionLabel.textContent = `Work Session • ${sessionCount}`;
+    completedSessions++;
+    totalWorkSeconds += durations.work;
+    updateStats();
   } else if (sessionType === "short") {
     sessionLabel.textContent = `Short Break`;
   } else {
@@ -90,6 +99,17 @@ function resetTimer() {
   progressBar.style.width = "0%";
   startBtn.disabled = false;
   pauseBtn.disabled = true;
+  //
+  completedSessions = 0;
+  totalWorkSeconds = 0;
+  updateStats();
+}
+
+function updateStats() {
+  completedSessionsEl.textContent = completedSessions;
+  const hours = Math.floor(totalWorkSeconds / 3600);
+  const minutes = Math.floor((totalWorkSeconds % 3600) / 60);
+  totalTimeEl.textContent = `${hours}h ${minutes}m`;
 }
 
 startBtn.addEventListener("click", startTimer);
@@ -98,3 +118,4 @@ resetBtn.addEventListener("click", resetTimer);
 
 updateDisplay();
 updateSessionLabel();
+updateStats();

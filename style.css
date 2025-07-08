@@ -49,3 +49,9 @@ button:disabled {
   background-color: #00bfff;
   transition: width 1s linear;
 }
+
+#stats {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #555;
+}
