@@ -10,6 +10,11 @@ const durations = {
   long: 15 * 60,
 };
 
+const workInput = document.getElementById("workInput");
+const shortInput = document.getElementById("shortInput");
+const longInput = document.getElementById("longInput");
+const resetSettingsBtn = document.getElementById("resetSettingsBtn");
+
 let sessionType = "work";
 let sessionCount = 1;
 
@@ -53,6 +58,13 @@ function updateSessionLabel() {
 function startTimer() {
   if (timerId !== null) return;
 
+  updateDurationsFromInput();
+
+  if (timeLeft <= 0 || timeLeft > getCurrentDuration()) {
+    timeLeft = getCurrentDuration();
+    updateDisplay();
+  }
+
   timerId = setInterval(() => {
     if (timeLeft > 0) {
       timeLeft--;
@@ -62,12 +74,17 @@ function startTimer() {
       timerId = null;
 
       if (sessionType === "work") {
+        completedSessions++;
+        totalWorkSeconds += durations.work;
+        updateStats();
+
         sessionCount++;
         sessionType = sessionCount % 5 === 0 ? "long" : "short";
       } else {
         sessionType = "work";
       }
 
+      updateDurationsFromInput();
       timeLeft = getCurrentDuration();
       updateSessionLabel();
       updateDisplay();
@@ -93,6 +110,7 @@ function resetTimer() {
   timerId = null;
   sessionType = "work";
   sessionCount = 1;
+  updateDurationsFromInput();
   timeLeft = getCurrentDuration();
   updateSessionLabel();
   updateDisplay();
@@ -112,9 +130,23 @@ function updateStats() {
   totalTimeEl.textContent = `${hours}h ${minutes}m`;
 }
 
+function updateDurationsFromInput() {
+  durations.work = parseInt(workInput.value, 10) * 60;
+  durations.short = parseInt(shortInput.value, 10) * 60;
+  durations.long = parseInt(longInput.value, 10) * 60;
+}
+
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
 resetBtn.addEventListener("click", resetTimer);
+//
+resetSettingsBtn.addEventListener("click", () => {
+  workInput.value = 25;
+  shortInput.value = 5;
+  longInput.value = 15;
+  updateDurationsFromInput();
+  resetTimer();
+});
 
 updateDisplay();
 updateSessionLabel();
