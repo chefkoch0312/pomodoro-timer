@@ -1,18 +1,27 @@
 body {
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 50px;
+  font-family: "Segoe UI", sans-serif;
+  background: #f4f6fa;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
 #timer {
-  font-size: 48px;
-  margin: 20px 0;
+  font-size: 12vw;
+  max-font-size: 56px;
   color: #ff6347;
+  margin: 20px 0;
 }
 
 button {
-  font-size: 16px;
+  font-size: 1rem;
   padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -26,12 +35,14 @@ button:disabled {
 }
 
 .container {
+  background: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 100%;
   max-width: 400px;
-  margin: 0 auto;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  box-sizing: border-box;
 }
 
 #progressContainer {
@@ -120,4 +131,24 @@ body.dark input {
 #themeToggle {
   margin-top: 20px;
   font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  #settings label,
+  #stats p {
+    font-size: 13px;
+  }
+
+  #timer {
+    font-size: 18vw;
+  }
+
+  input {
+    width: 50px;
+  }
+
+  button {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
 }
