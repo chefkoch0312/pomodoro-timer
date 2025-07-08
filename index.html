@@ -24,18 +24,14 @@
         <button id="resetBtn">Reset</button>
       </div>
       <div id="settings">
-        <label>
-          Work (min):
-          <input type="number" id="workInput" value="25" min="1" max="60" />
-        </label>
-        <label>
-          Short Break (min):
-          <input type="number" id="shortInput" value="5" min="1" max="30" />
-        </label>
-        <label>
-          Long Break (min):
-          <input type="number" id="longInput" value="15" min="1" max="60" />
-        </label>
+        <label for="workInput">Arbeitszeit (min):</label>
+        <input type="number" id="workInput" value="25" min="1" />
+
+        <label for="shortInput">Pause (min):</label>
+        <input type="number" id="shortInput" value="5" min="1" />
+
+        <label for="longInput">Lange Pause (min):</label>
+        <input type="number" id="longInput" value="15" min="1" />
         <button id="resetSettingsBtn">Reset to defaults</button>
       </div>
       <div id="stats">
