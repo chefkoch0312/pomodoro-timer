@@ -3,6 +3,7 @@ let totalWorkSeconds = 0;
 
 const completedSessionsEl = document.getElementById("completedSessions");
 const totalTimeEl = document.getElementById("totalTime");
+const notification = document.getElementById("notification");
 
 const durations = {
   work: 25 * 60,
@@ -88,6 +89,8 @@ function startTimer() {
       timeLeft = getCurrentDuration();
       updateSessionLabel();
       updateDisplay();
+      playBeep();
+      showNotification();
       startTimer();
     }
   }, 1000);
@@ -134,6 +137,23 @@ function updateDurationsFromInput() {
   durations.work = parseInt(workInput.value, 10) * 60;
   durations.short = parseInt(shortInput.value, 10) * 60;
   durations.long = parseInt(longInput.value, 10) * 60;
+}
+
+function showNotification() {
+  notification.classList.add("show");
+  setTimeout(() => {
+    notification.classList.remove("show");
+  }, 2000);
+}
+//
+function playBeep() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = ctx.createOscillator();
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+  oscillator.connect(ctx.destination);
+  oscillator.start();
+  oscillator.stop(ctx.currentTime + 0.2);
 }
 
 startBtn.addEventListener("click", startTimer);
