@@ -208,6 +208,8 @@ function loadState() {
   } catch (err) {
     console.warn("Could not parse saved state:", err);
   }
+  timeLeft = getCurrentDuration();
+  updateDisplay();
 }
 
 loadState();
