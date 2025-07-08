@@ -7,6 +7,7 @@ The goal wasn’t just to create a working timer, but to make the process of bui
 ![Built With](https://img.shields.io/badge/built_with-HTML%20%7C%20CSS%20%7C%20JavaScript-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-active-success)
+[![Live Demo](https://img.shields.io/badge/demo-online-blueviolet)](https://kado-ber.de/pomodoro/index.html)
 
 
 ## **🚀 Features**
@@ -16,11 +17,14 @@ The goal wasn’t just to create a working timer, but to make the process of bui
 - User settings and stats are stored locally via localStorage
 - Responsive design with an optional dark mode
 - Modular JavaScript structure (fully refactored)
-- Developed as a public showcase with a well-documented Git history
 
 ## **🖼️ Screenshots**
 
 ![Screenshot](./screenshot.png)
+
+## **🔗 Demo**
+
+[🔗Pomodoro-Timer](https://kado-ber.de/pomodoro/index.html)
 
 ## **🧾 Lizenz**
 
