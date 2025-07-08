@@ -10,8 +10,7 @@ body {
 }
 
 #timer {
-  font-size: 12vw;
-  max-font-size: 56px;
+  font-size: clamp(32px, 12vw, 56px);
   color: #ff6347;
   margin: 20px 0;
 }
