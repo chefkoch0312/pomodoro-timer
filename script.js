@@ -5,6 +5,8 @@ const completedSessionsEl = document.getElementById("completedSessions");
 const totalTimeEl = document.getElementById("totalTime");
 const notification = document.getElementById("notification");
 
+const STORAGE_KEY = "kdb_pomodoro_state";
+
 const durations = {
   work: 25 * 60,
   short: 5 * 60,
@@ -131,12 +133,14 @@ function updateStats() {
   const hours = Math.floor(totalWorkSeconds / 3600);
   const minutes = Math.floor((totalWorkSeconds % 3600) / 60);
   totalTimeEl.textContent = `${hours}h ${minutes}m`;
+  saveState();
 }
 
 function updateDurationsFromInput() {
   durations.work = parseInt(workInput.value, 10) * 60;
   durations.short = parseInt(shortInput.value, 10) * 60;
   durations.long = parseInt(longInput.value, 10) * 60;
+  saveState();
 }
 
 function showNotification() {
@@ -166,8 +170,47 @@ resetSettingsBtn.addEventListener("click", () => {
   longInput.value = 15;
   updateDurationsFromInput();
   resetTimer();
+  saveState();
 });
 
+function saveState() {
+  const state = {
+    durations: {
+      work: parseInt(workInput.value, 10),
+      short: parseInt(shortInput.value, 10),
+      long: parseInt(longInput.value, 10),
+    },
+    stats: {
+      completedSessions,
+      totalWorkSeconds,
+    },
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return;
+
+  try {
+    const parsed = JSON.parse(stored);
+    if (parsed.durations) {
+      workInput.value = parsed.durations.work;
+      shortInput.value = parsed.durations.short;
+      longInput.value = parsed.durations.long;
+      updateDurationsFromInput();
+    }
+    if (parsed.stats) {
+      completedSessions = parsed.stats.completedSessions || 0;
+      totalWorkSeconds = parsed.stats.totalWorkSeconds || 0;
+      updateStats();
+    }
+  } catch (err) {
+    console.warn("Could not parse saved state:", err);
+  }
+}
+
+loadState();
 updateDisplay();
 updateSessionLabel();
 updateStats();
