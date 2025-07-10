@@ -35,11 +35,11 @@ const darkModeSwitch = document.getElementById("darkModeSwitch");
 const resetSettingsBtn = document.getElementById("resetSettingsBtn");
 
 /* ==================== Timerlogik ==================== */
-function getCurrentDuration() {
+const getCurrentDuration = () => {
   return durations[sessionType];
-}
+};
 
-function startTimerLogic() {
+const startTimerLogic = () => {
   if (timerId !== null) return;
   updateDurationsFromInput();
 
@@ -51,18 +51,18 @@ function startTimerLogic() {
   timerId = setInterval(tick, 1000);
   startBtn.disabled = true;
   pauseBtn.disabled = false;
-}
+};
 
-function tick() {
+const tick = () => {
   if (timeLeft > 0) {
     timeLeft--;
     updateDisplay();
   } else {
     handleSessionEnd();
   }
-}
+};
 
-function handleSessionEnd() {
+const handleSessionEnd = () => {
   clearInterval(timerId);
   timerId = null;
 
@@ -83,18 +83,18 @@ function handleSessionEnd() {
   playNotificationSound();
   showNotification();
   startTimerLogic();
-}
+};
 
-function pauseTimer() {
+const pauseTimer = () => {
   if (timerId !== null) {
     clearInterval(timerId);
     timerId = null;
     startBtn.disabled = false;
     pauseBtn.disabled = true;
   }
-}
+};
 
-function resetTimer() {
+const resetTimer = () => {
   clearInterval(timerId);
   timerId = null;
   sessionType = "work";
@@ -109,10 +109,10 @@ function resetTimer() {
   progressBar.style.width = "0%";
   startBtn.disabled = false;
   pauseBtn.disabled = true;
-}
+};
 
 /* ==================== Anzeige / UI ==================== */
-function updateDisplay() {
+const updateDisplay = () => {
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const seconds = String(timeLeft % 60).padStart(2, "0");
   timerDisplay.textContent = `${minutes}:${seconds}`;
@@ -120,9 +120,9 @@ function updateDisplay() {
   const total = getCurrentDuration();
   const percent = ((total - timeLeft) / total) * 100;
   progressBar.style.width = `${percent}%`;
-}
+};
 
-function updateSessionLabel() {
+const updateSessionLabel = () => {
   if (sessionType === "work") {
     sessionLabel.textContent = `Work Session • ${sessionCount}`;
   } else if (sessionType === "short") {
@@ -130,20 +130,20 @@ function updateSessionLabel() {
   } else {
     sessionLabel.textContent = `Long Break`;
   }
-}
+};
 
-function updateStats() {
+const updateStats = () => {
   completedSessionsEl.textContent = completedSessions;
   const hours = Math.floor(totalWorkSeconds / 3600);
   const minutes = Math.floor((totalWorkSeconds % 3600) / 60);
   totalTimeEl.textContent = `${hours}h ${minutes}m`;
   saveState();
-}
+};
 
 /* ==================== Sound & Benachrichtigung ==================== */
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const playSound = (frequency = 800, duration = 0.5, volume = 0.1) => {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-function playSound(frequency = 800, duration = 0.5, volume = 0.1) {
   if (!audioContext) return;
 
   try {
@@ -171,28 +171,28 @@ function playSound(frequency = 800, duration = 0.5, volume = 0.1) {
   } catch (error) {
     console.warn("Fehler beim Abspielen des Sounds:", error);
   }
-}
+};
 
-function playNotificationSound() {
+const playNotificationSound = () => {
   setTimeout(() => playSound(800, 0.2, 0.1), 250);
-}
+};
 
-function showNotification() {
+const showNotification = () => {
   notification.classList.add("show");
   setTimeout(() => {
     notification.classList.remove("show");
   }, 2000);
-}
+};
 
 /* ==================== Settings & Speicherung ==================== */
-function updateDurationsFromInput() {
+const updateDurationsFromInput = () => {
   durations.work = parseInt(workInput.value, 10) * 60;
   durations.short = parseInt(shortInput.value, 10) * 60;
   durations.long = parseInt(longInput.value, 10) * 60;
   saveState();
-}
+};
 
-function saveState() {
+const saveState = () => {
   const state = {
     durations: {
       work: parseInt(workInput.value, 10),
@@ -207,9 +207,9 @@ function saveState() {
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   localStorage.setItem(THEME_KEY, state.theme);
-}
+};
 
-function loadState() {
+const loadState = () => {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return;
 
@@ -232,36 +232,61 @@ function loadState() {
 
   timeLeft = getCurrentDuration();
   updateDisplay();
-}
+};
 
-function applyTheme(mode) {
+const applyTheme = (mode) => {
   document.body.classList.toggle("dark", mode === "dark");
   darkModeSwitch.checked = mode === "dark";
-}
+};
 
 /* ==================== Events ==================== */
-startBtn.addEventListener("click", startTimerLogic);
-pauseBtn.addEventListener("click", pauseTimer);
-resetBtn.addEventListener("click", resetTimer);
+const addEventListeners = () => {
+  startBtn.addEventListener("click", startTimerLogic);
+  pauseBtn.addEventListener("click", pauseTimer);
+  resetBtn.addEventListener("click", resetTimer);
 
-resetSettingsBtn.addEventListener("click", () => {
-  workInput.value = 25;
-  shortInput.value = 5;
-  longInput.value = 15;
-  updateDurationsFromInput();
-  resetTimer();
-});
+  resetSettingsBtn.addEventListener("click", () => {
+    workInput.value = 25;
+    shortInput.value = 5;
+    longInput.value = 15;
+    updateDurationsFromInput();
+    resetTimer();
+  });
 
-darkModeSwitch.addEventListener("change", () => {
-  const mode = darkModeSwitch.checked ? "dark" : "light";
-  applyTheme(mode);
-  saveState();
-});
+  darkModeSwitch.addEventListener("change", () => {
+    const mode = darkModeSwitch.checked ? "dark" : "light";
+    applyTheme(mode);
+    saveState();
+  });
+};
 
 /* ==================== Initialisierung ==================== */
-loadState();
-const savedTheme = localStorage.getItem(THEME_KEY) || "light";
-applyTheme(savedTheme);
-updateSessionLabel();
-updateDisplay();
-updateStats();
+const LABELS_EN = {
+  work: "Work Duration",
+  short: "Short Break",
+  long: "Long Break",
+};
+const LABELS_DE = {
+  work: "Arbeitszeit",
+  short: "Pause",
+  long: "Lange Pause",
+};
+
+const initLabels = (labels = LABELS_EN) => {
+  document.querySelector('label[for="workInput"]').textContent = labels.work;
+  document.querySelector('label[for="shortInput"]').textContent = labels.short;
+  document.querySelector('label[for="longInput"]').textContent = labels.long;
+};
+
+const initApp = () => {
+  loadState();
+  const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+  initLabels(LABELS_EN);
+  // initLabels(LABELS_DE);
+  applyTheme(savedTheme);
+  updateSessionLabel();
+  updateDisplay();
+  updateStats();
+  addEventListeners();
+};
+document.addEventListener("DOMContentLoaded", initApp);
