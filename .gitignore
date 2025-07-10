@@ -1,0 +1,30 @@
+# Node.js dependencies (falls du später npm verwendest)
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-spezifische Dateien
+.DS_Store
+Thumbs.db
+
+# VSCode settings (optional)
+.vscode/
+
+# Build-Verzeichnisse (optional, falls du bundelst)
+dist/
+build/
+
+# Testverzeichnis ausschließen
+test/
+
+# Sonstige temporäre Dateien
+*.log
+*.tmp
+*.swp
+
+# Environment-Dateien (falls vorhanden)
+.env
+.env.local

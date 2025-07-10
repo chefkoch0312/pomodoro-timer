@@ -80,7 +80,7 @@ function handleSessionEnd() {
   timeLeft = getCurrentDuration();
   updateSessionLabel();
   updateDisplay();
-  playBeep();
+  playNotificationSound();
   showNotification();
   startTimerLogic();
 }
@@ -141,14 +141,40 @@ function updateStats() {
 }
 
 /* ==================== Sound & Benachrichtigung ==================== */
-function playBeep() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = ctx.createOscillator();
-  oscillator.type = "sine";
-  oscillator.frequency.setValueAtTime(880, ctx.currentTime);
-  oscillator.connect(ctx.destination);
-  oscillator.start();
-  oscillator.stop(ctx.currentTime + 0.2);
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(frequency = 800, duration = 0.5, volume = 0.1) {
+  if (!audioContext) return;
+
+  try {
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioContext.currentTime + duration
+    );
+
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+  } catch (error) {
+    console.warn("Fehler beim Abspielen des Sounds:", error);
+  }
+}
+
+function playNotificationSound() {
+  setTimeout(() => playSound(800, 0.2, 0.1), 250);
 }
 
 function showNotification() {
